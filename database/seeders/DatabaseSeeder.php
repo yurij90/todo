@@ -24,13 +24,13 @@ class DatabaseSeeder extends Seeder
         // Users Table (id, role, name, email, email_verified_at,
         // password, remember_token, created_at, updated_at, deleted_at)
 
-            // Users
+            // Fake Users
         for ($i = 0; $i < 5; $i++) {
             DB::table('users')->insert([
                 'role' => 'user',
                 'name' => $faker->unique()->userName,
                 'email' => $faker->unique()->safeEmail,
-                'password' => $faker->password,
+                'password' => Hash::make($faker->password),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
@@ -41,7 +41,17 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
             'name' => 'admin',
             'email' => 'admin@admin.com',
-            'password' => 'admin',
+            'password' => Hash::make('admin'),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
+            // User
+        DB::table('users')->insert([
+            'role' => 'user',
+            'name' => 'user',
+            'email' => 'user@user.com',
+            'password' => Hash::make('user'),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -68,10 +78,10 @@ class DatabaseSeeder extends Seeder
 
         // Todos Table (id, user_id, group_id, priority, status,
         // description, created_at, updated_at, deleted_at)
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             DB::table('todos')->insert([
                 'user_id' => $faker->numberBetween(1, 5),
-                'group_id' => $faker->numberBetween(0, 5),
+                'group_id' => $faker->randomElement([0, 1, 2, 3, 4, 5]),
                 'priority' => $faker->numberBetween(1, 5),
                 'status' => $faker->randomElement(['unsolved', 'in_progress', 'solved']),
                 'description' => $faker->sentence(5, false),

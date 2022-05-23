@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('todos', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger("user_id");
-            $table->bigInteger("group_id")->nullable();
+            $table->unsignedBigInteger("user_id");
+            $table->unsignedBigInteger("group_id")->nullable();
             $table->tinyInteger("priority")->default(0)->unsigned();
             $table->enum("status", ["unsolved", "in_progress", "solved"])->default("unsolved");
             $table->text("description");

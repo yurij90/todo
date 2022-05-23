@@ -9,4 +9,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Group extends Model
 {
     use HasFactory, SoftDeletes;
+
+    public function todos(){
+        return $this->hasMany(Todo::class);
+    }
+
+    public function users(){
+        return $this->belongsToMany(User::class, 'user_groups');
+    }
 }
