@@ -10,22 +10,27 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
 
-                    <h2>Feladataid</h2>
+                    <div id="app">
+                        <todo-table :todos='@json($todos)'></todo-table>
+                    </div>
+                    {{-- <h2>Feladataid</h2>
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Id</th>
+                                <th>Létrehozta</th>
                                 <th>Csoport</th>
                                 <th>Prioritás</th>
                                 <th>Leírás</th>
                                 <th>Hozzáadva</th>
+                                <th></th>
+                                <th></th>
                             </tr>
                         </thead>
 
                         <tbody>
                         @forelse($todos as $todo)
                             <tr>
-                                <td>{{ $todo->user_id }}</td>
+                                <td>{{ $todo->user->name }}</td>
                                 <td>{{ $todo->group->group_name ?? "Egyéni" }}</td>
                                 <td>{{ $todo->priority }}</td>
                                 <td>{{ $todo->description }}</td>
@@ -39,27 +44,32 @@
                             </tr>
                         @endforelse
                         </tbody>
-                    </table>
+                    </table> --}}
 
                     <hr>
                     <h2>Feladat létrehozása</h2>
-                    <form class="p-5" action="{{ route('todo.store') }}" method="post">
+                    <form class="p-5" action="{{ route('todo.store') }}" method="POST">
                         @csrf
 
-                        <div class="row">
-                            <div class="col">
-                                <label class="form-label mt-2" for="todo_select">Csoport</label>
-                                <select id="todo_select" class="form-control" name="todo_group_id">
-                                <option value="0">Egyéni</option>
-                            @foreach($groups as $group)
-                                <option value="{{ $group->id }}">{{ $group->group_name }}</option>
-                            @endforeach
-                                </select>
-                            </div>
-                            <div class="col-4">
-                        <label class="form-label mt-2" for="todo_prio">Prioritás</label>
-                        <input id="todo_prio" class="form-control" type="number" value="1" min="1" max="5" name="todo_priority">
-                            </div>
+                        Prioritás
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="todo_priority" id="todo_prio_1" value="1" checked>
+                            <label class="form-check-label" for="todo_prio_1">1</label>
+                        </div>
+                        @for($i = 2; $i < 6; $i++)
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="todo_priority" id="todo_prio_{{ $i }}" value="{{ $i }}">
+                            <label class="form-check-label" for="todo_prio_{{ $i }}">{{ $i }}</label>
+                        </div>
+                        @endfor
+                        <div>
+                        <label class="form-label mt-2" for="todo_select">Csoport</label>
+                        <select id="todo_select" class="form-control" name="todo_group_id">
+                        <option value="0">Egyéni</option>
+                        @foreach($groups as $group)
+                        <option value="{{ $group->id }}">{{ $group->group_name }}</option>
+                        @endforeach
+                        </select>
                         </div>
                         <label class="form-label mt-2" for="todo_textarea">Leírás</label>
                         <textarea rows="3" id="todo_textarea" class="form-control" name="todo_description"></textarea>

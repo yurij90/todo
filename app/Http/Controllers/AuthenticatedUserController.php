@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TodoCreatePostRequest;
+use App\Http\Requests\UserUpdatePostRequest;
 use App\Models\Group;
 use App\Models\Todo;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthenticatedUserController extends Controller
 {
@@ -20,13 +21,17 @@ class AuthenticatedUserController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $user_id = Auth::id();
-
         $groups = $user->groups->sortBy('group_name');
-        $todos = $user->todos->sortBy('created_at')->sortBy('priority')->sortBy('group_id', false);
+        $user_todos = $user->todos;
+        $group_todos = array();
+        foreach($groups as $group){
+            $group_id = $group->id;
+            $group_todos = Todo::where('group_id', '=', $group_id)->get();
+        }
+            $todos = $user_todos->merge($group_todos);
 
 
-        //echo '<pre>' , print_r($group_todos) , '</pre>';
+        //echo '<pre>' , print_r($user_groups_todos) , '</pre>';
 
         return view('todo', [
             'todos' => $todos,
@@ -105,5 +110,38 @@ class AuthenticatedUserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function edit_profile()
+    {
+        $user = Auth::user();
+
+        return view('edit', [
+            'user' => $user,
+        ]);
+    }
+
+    public function store_profile(UserUpdatePostRequest $request)
+    {
+        $user = Auth::user();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->save();
+        return redirect('dashboard');
+    }
+
+    public function groups()
+    {
+        $groups = Group::all("id", "group_name");
+
+        echo $groups;
+    }
+
+    public function users()
+    {
+        $users = User::all("id", "name");
+
+        echo $users;
     }
 }

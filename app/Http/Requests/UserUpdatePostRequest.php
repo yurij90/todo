@@ -4,8 +4,10 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
-class TodoCreatePostRequest extends FormRequest
+class UserUpdatePostRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +26,12 @@ class TodoCreatePostRequest extends FormRequest
      */
     public function rules()
     {
+        $user = Auth::id();
         return [
-
-            'todo_group_id' => 'required|integer',
-            'todo_priority' => 'required|integer|min:1|max:5',
-            'todo_description' => 'required|string',
-
+            'name' => ['required', 'string', Rule::unique('users','name')->ignore($user)],
+            'email' => ['required', 'string', 'email', Rule::unique('users','name')->ignore($user)],
+            'password' => ['required', 'string', Password::min(8)->mixedCase()->numbers()],
+            'password_confirm' => ['required', 'same:password'],
         ];
     }
 }

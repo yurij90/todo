@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthenticatedUserController;
 
@@ -15,6 +16,9 @@ use App\Http\Controllers\AuthenticatedUserController;
 */
 
 Route::get('/', function () {
+    if (Auth::user() != null){
+        return redirect()->route('dashboard');
+    }
     return view('auth.login');
 });
 
@@ -22,7 +26,13 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-Route::get('/todo', [AuthenticatedUserController::class, 'index'])->middleware(['auth'])->name('todo');
-Route::post('/todo', [AuthenticatedUserController::class, 'store'])->middleware(['auth'])->name('todo.store');
+Route::get('/todo', [AuthenticatedUserController::class, 'index'])
+    ->middleware(['auth'])->name('todo');
+Route::post('/todo', [AuthenticatedUserController::class, 'store'])
+    ->middleware(['auth'])->name('todo.store');
+Route::get('edit_profile', [AuthenticatedUserController::class, 'edit_profile'])
+    ->middleware(['auth'])->name('edit_profile');
+Route::post('edit_profile', [AuthenticatedUserController::class, 'store_profile'])
+    ->middleware(['auth'])->name('store_profile');
 
 require __DIR__.'/auth.php';
