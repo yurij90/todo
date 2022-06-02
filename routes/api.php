@@ -22,3 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('groups', [AuthenticatedUserController::class, 'groups']);
 
 Route::get('users', [AuthenticatedUserController::class, 'users']);
+
+Route::post('status', [AuthenticatedUserController::class, 'status']);

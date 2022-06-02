@@ -30,9 +30,11 @@ Route::get('/todo', [AuthenticatedUserController::class, 'index'])
     ->middleware(['auth'])->name('todo');
 Route::post('/todo', [AuthenticatedUserController::class, 'store'])
     ->middleware(['auth'])->name('todo.store');
-Route::get('edit_profile', [AuthenticatedUserController::class, 'edit_profile'])
+Route::get('/edit_profile', [AuthenticatedUserController::class, 'edit_profile'])
     ->middleware(['auth'])->name('edit_profile');
-Route::post('edit_profile', [AuthenticatedUserController::class, 'store_profile'])
+Route::post('/edit_profile', [AuthenticatedUserController::class, 'store_profile'])
     ->middleware(['auth'])->name('store_profile');
+Route::post('/todo/delete/{id}', [AuthenticatedUserController::class, 'destroy'])
+    ->middleware(['auth'])->name('todo_destroy');
 
 require __DIR__.'/auth.php';

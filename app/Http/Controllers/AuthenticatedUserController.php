@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TodoCreatePostRequest;
+use App\Http\Requests\TodoDestroyPostRequest;
 use App\Http\Requests\UserUpdatePostRequest;
 use App\Models\Group;
 use App\Models\Todo;
@@ -21,6 +22,7 @@ class AuthenticatedUserController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $user_id = Auth::id();
         $groups = $user->groups->sortBy('group_name');
         $user_todos = $user->todos;
         $group_todos = array();
@@ -34,6 +36,7 @@ class AuthenticatedUserController extends Controller
         //echo '<pre>' , print_r($user_groups_todos) , '</pre>';
 
         return view('todo', [
+            'user_id' => $user_id,
             'todos' => $todos,
             'groups' => $groups,
         ]);
@@ -107,9 +110,10 @@ class AuthenticatedUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(TodoDestroyPostRequest $request)
     {
-        //
+        Todo::destroy($request->id);
+        return redirect()->route('todo');
     }
 
     public function edit_profile()
@@ -143,5 +147,21 @@ class AuthenticatedUserController extends Controller
         $users = User::all("id", "name");
 
         echo $users;
+    }
+    public function status(Request $request)
+    {
+        $todo = Todo::find($request->status_id);
+        switch ($todo->status){
+            case "unsolved":
+                $todo->status = "in_progress";
+                break;
+            case "in_progress":
+                $todo->status = "solved";
+                break;
+            case "solved":
+                $todo->status = "in_progress";
+        }
+        $todo->save();
+        return $todo->status;
     }
 }

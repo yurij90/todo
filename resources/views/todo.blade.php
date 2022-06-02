@@ -11,7 +11,7 @@
                 <div class="p-6 bg-white border-b border-gray-200">
 
                     <div id="app">
-                        <todo-table :todos='@json($todos)'></todo-table>
+                        <todo-table :user_id='{{ $user_id }}' :todos='@json($todos)'></todo-table>
                     </div>
                     {{-- <h2>Feladataid</h2>
                     <table class="table table-striped">

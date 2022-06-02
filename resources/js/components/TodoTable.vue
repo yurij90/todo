@@ -21,9 +21,14 @@
             <td>{{ todo.priority }}</td>
             <td>{{ todo.description }}</td>
             <td>{{ datetime(todo.created_at) }}</td>
+            <td><change-status-button :todo_id="todo.id" :todo_status="todo.status"></change-status-button></td>
+            <td>
+                <delete-todo-button :user_id="user_id" :todo_user_id="todo.user_id" :todo_id="todo.id">
+                </delete-todo-button>
+            </td>
         </tr>
         <tr v-show="show">
-            <td colspan="5">
+            <td colspan="7">
                 Nincsenek feladatai!
             </td>
         </tr>
@@ -33,9 +38,13 @@
 </template>
 
 <script>
+import ChangeStatusButton from "./ChangeStatusButton";
+import DeleteTodoButton from "./DeleteTodoButton";
+
 export default {
     name: "TodoTable",
-    props: ['todos'],
+    components: {DeleteTodoButton, ChangeStatusButton},
+    props: ['todos', 'user_id'],
     data() {
         return {
             show: false,
