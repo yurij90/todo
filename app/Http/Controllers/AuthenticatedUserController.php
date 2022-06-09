@@ -8,17 +8,13 @@ use App\Http\Requests\UserUpdatePostRequest;
 use App\Models\Group;
 use App\Models\Todo;
 use App\Models\User;
+use App\Models\UserGroup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthenticatedUserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $user = Auth::user();
@@ -42,22 +38,6 @@ class AuthenticatedUserController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(TodoCreatePostRequest $request)
     {
         $todo = new Todo;
@@ -70,50 +50,15 @@ class AuthenticatedUserController extends Controller
         return redirect()->route('todo');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(TodoDestroyPostRequest $request)
     {
-        Todo::destroy($request->id);
-        return redirect()->route('todo');
+        $user_id = Auth::id();
+        $todo = Todo::find($request->id);
+        if ($user_id == $todo->user_id){
+            Todo::destroy($request->id);
+            return redirect()->route('todo');
+        }
+        else abort(403);
     }
 
     public function edit_profile()
@@ -148,6 +93,7 @@ class AuthenticatedUserController extends Controller
 
         echo $users;
     }
+
     public function status(Request $request)
     {
         $todo = Todo::find($request->status_id);
@@ -163,5 +109,92 @@ class AuthenticatedUserController extends Controller
         }
         $todo->save();
         return $todo->status;
+    }
+
+    public function show_users()
+    {
+        if(Auth::user()->role == "admin")
+        {
+            $users = User::all();
+
+            return view('user', [
+                'users' => $users,
+            ]);
+
+        }
+        abort(403);
+
+    }
+
+    public function delete_user(Request $request)
+    {
+        if(Auth::user()->role == "admin")
+        {
+            User::destroy($request->id);
+            return redirect()->route('show_users');
+        }
+        abort(403);
+
+    }
+
+    public function promote_user(Request $request)
+    {
+        if(Auth::user()->role == "admin")
+        {
+            $user = User::find($request->id);
+            $user->role = "admin";
+            $user->save();
+            return redirect()->route('show_users');
+        }
+        abort(403);
+    }
+
+    public function demote_user(Request $request)
+    {
+        if(Auth::user()->role == "admin")
+        {
+            $user = User::find($request->id);
+            $user->role = "user";
+            $user->save();
+            return redirect()->route('show_users');
+        }
+        abort(403);
+    }
+
+    public function show_groups()
+    {
+        $user = Auth::user();
+        $groups = $user->groups->sortBy('group_name');
+        $users = User::all('id', 'name')->getDictionary();
+
+        //echo '<pre>' , print_r($groups) , '</pre>';
+
+        return view('group', [
+            'groups' => $groups,
+            'users' => $users,
+        ]);
+    }
+    public function create_group(Request $request)
+    {
+        $group = new Group;
+        $group->group_name = $request->group_name;
+        $group->group_owner = Auth::id();
+        $group->save();
+
+        $user_group = new UserGroup;
+        $user_group->user_id = Auth::id();
+        $user_group->group_id = $request->group_id;
+        $user_group->save();
+
+        return redirect()->route('show_groups');
+    }
+    public function add_member(Request $request)
+    {
+        $user_group = new UserGroup;
+        $user_group->user_id = $request->user_id;
+        $user_group->group_id = $request->group_id;
+        $user_group->save();
+
+        return redirect()->route('show_groups');
     }
 }

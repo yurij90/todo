@@ -16,8 +16,16 @@
                         {{ __('Irányítópult') }}
                     </x-nav-link>
                     <x-nav-link :href="route('todo')" :active="request()->routeIs('todo')">
-                        {{ __('Todo') }}
+                        {{ __('Feladatok') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('show_groups')" :active="request()->routeIs('show_groups')">
+                        {{ __('Csoportok') }}
+                    </x-nav-link>
+                    @if(Auth::user()->role == "admin")
+                    <x-nav-link :href="route('show_users')" :active="request()->routeIs('show_users')">
+                        {{ __('Felhasználók') }}
+                    </x-nav-link>
+                    @endif
                 </div>
             </div>
 

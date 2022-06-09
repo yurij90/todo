@@ -24525,13 +24525,13 @@ __webpack_require__.r(__webpack_exports__);
           return null;
 
         case "unsolved":
-          return "fa-solid fa-circle-xmark text-danger";
+          return "fa-solid fa-circle-xmark link-danger";
 
         case "in_progress":
-          return "fa-solid fa-circle-minus text-warning";
+          return "fa-solid fa-circle-minus link-warning";
 
         case "solved":
-          return "fa-solid fa-circle-check text-success";
+          return "fa-solid fa-circle-check link-success";
       }
     },
     modifyStatus: function modifyStatus(status_id) {
@@ -24782,7 +24782,7 @@ var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 
 var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
   colspan: "7"
-}, " Nincsenek feladatai! ", -1
+}, " Nincsenek feladataid! ", -1
 /* HOISTED */
 );
 

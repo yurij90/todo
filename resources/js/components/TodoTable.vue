@@ -29,7 +29,7 @@
         </tr>
         <tr v-show="show">
             <td colspan="7">
-                Nincsenek feladatai!
+                Nincsenek feladataid!
             </td>
         </tr>
         </tbody>

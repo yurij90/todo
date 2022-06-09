@@ -24,11 +24,11 @@ export default {
                 default:
                     return null;
                 case "unsolved":
-                    return "fa-solid fa-circle-xmark text-danger";
+                    return "fa-solid fa-circle-xmark link-danger";
                 case "in_progress":
-                    return "fa-solid fa-circle-minus text-warning";
+                    return "fa-solid fa-circle-minus link-warning";
                 case "solved":
-                    return "fa-solid fa-circle-check text-success";
+                    return "fa-solid fa-circle-check link-success";
             }
         },
         modifyStatus(status_id) {
