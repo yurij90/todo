@@ -165,12 +165,14 @@ class AuthenticatedUserController extends Controller
     {
         $user = Auth::user();
         $groups = $user->groups->sortBy('group_name');
+        $allgroups = Group::all();
         $users = User::all('id', 'name')->getDictionary();
 
         //echo '<pre>' , print_r($groups) , '</pre>';
 
         return view('group', [
             'groups' => $groups,
+            'allgroups' => $allgroups,
             'users' => $users,
         ]);
     }

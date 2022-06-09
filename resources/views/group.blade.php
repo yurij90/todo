@@ -37,7 +37,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5">
+                                <td colspan="4">
                                     Nincsenek csoportjaid!
                                 </td>
                             </tr>
@@ -51,14 +51,14 @@
                         @csrf
 
                         <label class="form-label" for="group_name">Csoport neve</label>
-                        <input type="hidden" name="group_id" value="{{ $groups->last()->id+1 }}">
+                        <input type="hidden" name="group_id" value="{{ $allgroups->last()->id+1 }}">
                         <input type="text" class="form-control" id="group_name" name="group_name" placeholder="Csoport neve">
                         <input class="btn btn-primary mt-2" type="submit" value="Létrehozás">
                     </form>
 
                     <hr>
                     <h2>Csoportok kezelése</h2>
-                    @foreach($groups as $group)
+                    @forelse($groups as $group)
                     @if($group->group_owner == Auth::id())
                         <hr>
                     <h4>Csoport neve: {{ $group->group_name }}</h4>
@@ -77,7 +77,10 @@
                         <input class="btn btn-primary mt-2" type="submit" value="Hozzáadás">
                     </form>
                     @endif
-                    @endforeach
+                        @empty
+                        <h4>Nincsenek csoportjaid!</h4>
+                        <hr>
+                    @endforelse
                 </div>
             </div>
         </div>
