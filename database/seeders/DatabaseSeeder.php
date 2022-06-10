@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Group;
+use App\Models\User;
 use Carbon\Carbon;
 use Faker\Factory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -67,10 +69,10 @@ class DatabaseSeeder extends Seeder
         }
 
         // User_groups Table (id, user_id, group_id, created_at, updated_at, deleted_at)
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 30; $i++) {
             DB::table('user_groups')->insert([
-                'user_id' => $faker->numberBetween(1, 7),
-                'group_id' => $faker->numberBetween(1, 10),
+                'user_id' => User::all()->random()->id,
+                'group_id' => Group::all()->random()->id,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);

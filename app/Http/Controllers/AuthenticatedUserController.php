@@ -22,7 +22,7 @@ class AuthenticatedUserController extends Controller
         $groups = $user->groups->sortBy('group_name');
         $user_todos = $user->todos;
         foreach($groups as $group){
-            $todos = Todo::where('group_id', $group->id)->get();
+            $todos = Todo::where('group_id', "=", $group->id)->get();
             foreach($todos as $todo){
                 $user_todos[] = $todo;
             }
