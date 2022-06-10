@@ -103,6 +103,8 @@ export default {
     beforeMount() {
         this.getGroupname();
         this.getUsername();
+    },
+    mounted() {
         this.ifTableEmpty();
     },
 }

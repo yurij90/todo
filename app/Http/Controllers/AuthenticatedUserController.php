@@ -21,12 +21,20 @@ class AuthenticatedUserController extends Controller
         $user_id = Auth::id();
         $groups = $user->groups->sortBy('group_name');
         $user_todos = $user->todos;
-        $group_todos = array();
         foreach($groups as $group){
-            $group_id = $group->id;
-            $group_todos = Todo::where('group_id', '=', $group_id)->get();
+            $todos = Todo::where('group_id', $group->id)->get();
+            foreach($todos as $todo){
+                $user_todos[] = $todo;
+            }
+
+
+
         }
-            $todos = $user_todos->merge($group_todos);
+        $todos = $user_todos;
+
+        //$todos = $user_todos->merge($group_todos);
+
+        //echo $group_todos;
 
 
         //echo '<pre>' , print_r($user_groups_todos) , '</pre>';

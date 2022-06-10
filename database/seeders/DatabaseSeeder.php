@@ -57,20 +57,20 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Groups Table (id, group_name, group_owner, created_at, updated_at, deleted_at)
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             DB::table('groups')->insert([
                 'group_name' => $faker->unique()->userName,
-                'group_owner' => $faker->numberBetween(1, 5),
+                'group_owner' => $faker->numberBetween(1, 7),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
         }
 
         // User_groups Table (id, user_id, group_id, created_at, updated_at, deleted_at)
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             DB::table('user_groups')->insert([
-                'user_id' => $faker->numberBetween(1, 5),
-                'group_id' => $faker->numberBetween(1, 5),
+                'user_id' => $faker->numberBetween(1, 7),
+                'group_id' => $faker->numberBetween(1, 10),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
@@ -78,9 +78,9 @@ class DatabaseSeeder extends Seeder
 
         // Todos Table (id, user_id, group_id, priority, status,
         // description, created_at, updated_at, deleted_at)
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 50; $i++) {
             DB::table('todos')->insert([
-                'user_id' => $faker->numberBetween(1, 5),
+                'user_id' => $faker->numberBetween(1, 7),
                 'group_id' => $faker->randomElement([0, 1, 2, 3, 4, 5]),
                 'priority' => $faker->numberBetween(1, 5),
                 'status' => $faker->randomElement(['unsolved', 'in_progress', 'solved']),

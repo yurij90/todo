@@ -24669,6 +24669,8 @@ __webpack_require__.r(__webpack_exports__);
   beforeMount: function beforeMount() {
     this.getGroupname();
     this.getUsername();
+  },
+  mounted: function mounted() {
     this.ifTableEmpty();
   }
 });
